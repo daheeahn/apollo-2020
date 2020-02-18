@@ -9,11 +9,13 @@ import { useQuery } from "react-apollo";
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       language
       rating
       summary
       medium_cover_image
+      isLiked @client
     }
     suggestions(id: $id) {
       title
@@ -32,7 +34,13 @@ export default () => {
 
   return (
     <div>
-      {<h1>{loading ? "Loading..." : data.movie.title}</h1>}
+      {
+        <h1>
+          {loading
+            ? "Loading..."
+            : `${data.movie.title} ${data.movie.isLiked ? "💕" : "😨"} `}
+        </h1>
+      }
       {!loading && data.movie && (
         <>
           <h1>{data.movie.summary}</h1>
